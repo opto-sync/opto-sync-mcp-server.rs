@@ -1,0 +1,51 @@
+[package]
+name = "opto-sync-mcp-server"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT OR Apache-2.0"
+description = "Hardened MCP server for Opto-Sync reconciliation and protocol diagnostics"
+repository = "https://github.com/opto-sync/opto-sync-mcp-server.rs"
+readme = "README.md"
+keywords = ["mcp", "sync", "offline-first", "json", "optimistic"]
+categories = ["development-tools", "network-programming"]
+
+[dependencies]
+axum = "0.8"
+clap = { version = "4.5", features = ["derive"] }
+opto-sync-client = { git = "https://github.com/opto-sync/opto-sync-clients", rev = "1d22a98fbef4888e36ca1f78b72d469f74f61721", default-features = false }
+ore-mcp-safety = { git = "https://github.com/ORESoftware/mcp-rust-libs", rev = "42cd61aae6908a7c587ababd954bcd8a05520d92" }
+rmcp = { version = "=3.1.4", default-features = false, features = [
+    "macros",
+    "schemars",
+    "server",
+    "transport-io",
+    "transport-streamable-http-server",
+] }
+schemars = "1.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal"] }
+tokio-util = "0.7"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+[dev-dependencies]
+ore-mcp-testkit = { git = "https://github.com/ORESoftware/mcp-rust-libs", rev = "42cd61aae6908a7c587ababd954bcd8a05520d92" }
+rmcp = { version = "=3.1.4", default-features = false, features = [
+    "client",
+    "macros",
+    "schemars",
+    "server",
+    "transport-async-rw",
+    "transport-io",
+    "transport-streamable-http-server",
+] }
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[lints.clippy]
+all = "warn"
+pedantic = "warn"
