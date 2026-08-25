@@ -1,0 +1,31 @@
+[package]
+org = "opto-sync"
+name = "opto-sync-mcp-server"
+version = "0.1.0"
+description = "Read-only MCP diagnostics for Opto Sync reconciliation and validation contracts"
+license = "MIT"
+keywords = ["mcp", "sync", "reconciliation", "diagnostics", "global-tool"]
+language = "rust"
+
+[package.repository]
+vcs = "git"
+url = "https://github.com/opto-sync/opto-sync-mcp-server.rs"
+
+[build]
+command = "cargo build --release --locked --bin opto-sync-mcp-server"
+outputs = ["target/release/opto-sync-mcp-server"]
+
+[bin]
+opto-sync-mcp-server = "target/release/opto-sync-mcp-server"
+
+[publish]
+include_readme = true
+tag_format = "v{version}"
+smoke_test = '''test -x "$ZED_PKG_TEST_TARGET/target/release/opto-sync-mcp-server" && responses=$(printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2026-07-28","capabilities":{},"clientInfo":{"name":"zed-r2g","version":"1"}}}' '{"jsonrpc":"2.0","method":"notifications/initialized"}' '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' | "$ZED_PKG_TEST_TARGET/target/release/opto-sync-mcp-server") && printf '%s\n' "$responses" | grep -q '"tools"' '''
+exclude = [".env", ".env.*", ".direnv/**", ".zed/**", ".zed-pack/**", "target/**", "tmp/**", "**/*.log", ".DS_Store"]
+
+[install]
+adapter = "none"
+
+[scripts]
+test = "cargo test --all-targets --all-features --locked"
