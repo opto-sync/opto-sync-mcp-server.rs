@@ -1,0 +1,1111 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "organization": "opto-sync",
+    "repository": "opto-sync/opto-sync-mcp-server.rs",
+    "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+    "linearIssue": "DEN-965",
+    "serverName": "opto-sync-mcp-server",
+    "summary": "Read-only Opto Sync reconciliation, protocol, consumer-compatibility, and exact infrastructure provider diagnostics."
+  },
+  "protocol": {
+    "finalRevision": "2025-11-25",
+    "transports": [
+      {
+        "kind": "stdio",
+        "enabled": true,
+        "authentication": "process_boundary",
+        "evidence": [
+          {
+            "kind": "source_test",
+            "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+            "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+            "verifiedAt": "2026-09-01T01:37:59Z"
+          }
+        ]
+      },
+      {
+        "kind": "streamable_http",
+        "enabled": true,
+        "authentication": "oauth_2_1",
+        "endpointPath": "/mcp",
+        "evidence": [
+          {
+            "kind": "source_test",
+            "reference": "src/http.rs#main",
+            "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+            "verifiedAt": "2026-09-01T01:37:59Z"
+          }
+        ]
+      }
+    ],
+    "remoteAuthorization": {
+      "authority": "shared-auth",
+      "protectedResourceMetadata": true,
+      "wwwAuthenticateChallenge": true,
+      "audienceBound": true,
+      "authorizedClientValidated": true,
+      "realmValidated": true,
+      "noTokenPassthrough": true,
+      "exactHostPolicy": true,
+      "credentialedRedirectsDisabled": true,
+      "credentialedAmbientProxyDisabled": true,
+      "requestBodyMaxBytes": 262144,
+      "responseBodyMaxBytes": 524288
+    }
+  },
+  "clients": [
+    {
+      "id": "cursor",
+      "role": "mcp_client",
+      "transports": [
+        "stdio",
+        "streamable_http"
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "openai",
+      "role": "mcp_client",
+      "transports": [
+        "streamable_http"
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "anthropic",
+      "role": "mcp_client",
+      "transports": [
+        "stdio",
+        "streamable_http"
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "gemini",
+      "role": "mcp_client",
+      "transports": [
+        "stdio",
+        "streamable_http"
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "grok",
+      "role": "mcp_client",
+      "transports": [
+        "streamable_http"
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "qwen",
+      "role": "mcp_client",
+      "transports": [
+        "stdio",
+        "streamable_http"
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    }
+  ],
+  "integrations": [
+    {
+      "id": "github",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_GITHUB_TOKEN",
+        "GITHUB_TOKEN",
+        "GH_TOKEN"
+      ],
+      "allowedOrigins": [
+        "https://api.github.com"
+      ],
+      "scopes": [
+        "organization:opto-sync",
+        "repository:opto-sync-mcp-server.rs",
+        "actions:read"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_organization",
+          "mode": "read",
+          "description": "Read a bounded projection of the exact Opto Sync GitHub organization.",
+          "organizationScope": "github.com/opto-sync",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        },
+        {
+          "name": "read_latest_workflow_run",
+          "mode": "read",
+          "description": "Read the latest Actions run for the exact Opto Sync MCP repository.",
+          "organizationScope": "github.com/opto-sync/opto-sync-mcp-server.rs",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "aws",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_AWS_ACCOUNT_ID",
+        "ORE_MCP_AWS_EKS_CLUSTERS",
+        "AWS_REGION"
+      ],
+      "allowedOrigins": [
+        "aws-sdk://configured-account"
+      ],
+      "scopes": [
+        "sts:GetCallerIdentity",
+        "eks:ListClusters",
+        "account:ORE_MCP_AWS_ACCOUNT_ID"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_caller_identity",
+          "mode": "read",
+          "description": "Verify the AWS caller identity against the exact configured Opto Sync account.",
+          "organizationScope": "AWS account ORE_MCP_AWS_ACCOUNT_ID",
+          "timeoutMs": 15000,
+          "outputMaxBytes": 524288
+        },
+        {
+          "name": "read_eks_clusters",
+          "mode": "read",
+          "description": "List only EKS clusters in the exact configured Opto Sync allowlist.",
+          "organizationScope": "EKS clusters ORE_MCP_AWS_EKS_CLUSTERS",
+          "timeoutMs": 15000,
+          "outputMaxBytes": 524288
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "gcp",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_GCP_PROJECT_ID",
+        "ORE_MCP_GCP_PROJECT_NUMBER",
+        "ORE_MCP_GCP_ACCESS_TOKEN"
+      ],
+      "allowedOrigins": [
+        "https://cloudresourcemanager.googleapis.com",
+        "https://serviceusage.googleapis.com"
+      ],
+      "scopes": [
+        "resourcemanager.projects.get",
+        "serviceusage.services.list",
+        "project:ORE_MCP_GCP_PROJECT_ID"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_project",
+          "mode": "read",
+          "description": "Read metadata for the exact configured Opto Sync Google Cloud project.",
+          "organizationScope": "GCP project ORE_MCP_GCP_PROJECT_ID",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        },
+        {
+          "name": "read_enabled_services",
+          "mode": "read",
+          "description": "List a bounded projection of APIs enabled for the exact Opto Sync project number.",
+          "organizationScope": "GCP project ORE_MCP_GCP_PROJECT_NUMBER",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "supabase",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_SUPABASE_URL",
+        "ORE_MCP_SUPABASE_SERVICE_ROLE_KEY"
+      ],
+      "allowedOrigins": [
+        "https://ORE_MCP_SUPABASE_URL"
+      ],
+      "scopes": [
+        "exact-project-origin",
+        "auth.settings:read",
+        "rest.openapi:read"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_auth_settings",
+          "mode": "read",
+          "description": "Read a safe projection of the exact Opto Sync Supabase authentication settings.",
+          "organizationScope": "Supabase origin ORE_MCP_SUPABASE_URL",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        },
+        {
+          "name": "read_data_api_schema",
+          "mode": "read",
+          "description": "Read bounded exposed-path metadata from the exact Opto Sync Data API schema.",
+          "organizationScope": "Supabase origin ORE_MCP_SUPABASE_URL",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "neon",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_NEON_ORGANIZATION_ID",
+        "ORE_MCP_NEON_PROJECT_ID",
+        "ORE_MCP_NEON_API_KEY"
+      ],
+      "allowedOrigins": [
+        "https://console.neon.tech"
+      ],
+      "scopes": [
+        "projects:read",
+        "branches:read",
+        "search:opto-sync"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_projects",
+          "mode": "read",
+          "description": "List a bounded Neon project projection filtered to the Opto Sync product name.",
+          "organizationScope": "Neon organization ORE_MCP_NEON_ORGANIZATION_ID",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        },
+        {
+          "name": "read_project_branches",
+          "mode": "read",
+          "description": "List safe branch state for one exact configured Opto Sync Neon project.",
+          "organizationScope": "Neon project ORE_MCP_NEON_PROJECT_ID",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "cloudflare",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_CLOUDFLARE_ZONE",
+        "ORE_MCP_CLOUDFLARE_ZONE_ID",
+        "ORE_MCP_CLOUDFLARE_API_TOKEN"
+      ],
+      "allowedOrigins": [
+        "https://api.cloudflare.com"
+      ],
+      "scopes": [
+        "zone:ORE_MCP_CLOUDFLARE_ZONE",
+        "zone:read",
+        "dns:read-without-content"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_zone",
+          "mode": "read",
+          "description": "Read bounded metadata for the exact configured Opto Sync Cloudflare zone.",
+          "organizationScope": "Cloudflare zone ORE_MCP_CLOUDFLARE_ZONE",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        },
+        {
+          "name": "read_dns_records",
+          "mode": "read",
+          "description": "Read bounded DNS metadata without returning record content or credentials.",
+          "organizationScope": "Cloudflare zone ORE_MCP_CLOUDFLARE_ZONE_ID",
+          "timeoutMs": 10000,
+          "outputMaxBytes": 524288
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "k8s_cluster",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_K8S_ENABLED",
+        "ORE_MCP_K8S_NAMESPACE",
+        "KUBECONFIG"
+      ],
+      "allowedOrigins": [
+        "kubeconfig://opto-sync"
+      ],
+      "scopes": [
+        "namespace:opto-sync",
+        "deployments:list",
+        "pods:list",
+        "selector:app.kubernetes.io/part-of=opto-sync"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_deployments",
+          "mode": "read",
+          "description": "List bounded deployment readiness in the exact Opto Sync Kubernetes namespace.",
+          "organizationScope": "ORESoftware/k8s-cluster namespace opto-sync",
+          "timeoutMs": 15000,
+          "outputMaxBytes": 524288
+        },
+        {
+          "name": "read_pods",
+          "mode": "read",
+          "description": "List bounded pod readiness for the exact Opto Sync part-of selector.",
+          "organizationScope": "namespace opto-sync selector app.kubernetes.io/part-of=opto-sync",
+          "timeoutMs": 15000,
+          "outputMaxBytes": 524288
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    },
+    {
+      "id": "nats",
+      "role": "upstream_service",
+      "implementation": {
+        "module": "src/parity.rs",
+        "symbol": "org_spec",
+        "test": "tests/stdio_integration.rs"
+      },
+      "configurationKeys": [
+        "ORE_MCP_NATS_URL"
+      ],
+      "allowedOrigins": [
+        "nats://ORE_MCP_NATS_URL"
+      ],
+      "scopes": [
+        "opto-sync.mcp.service.read.v1",
+        "opto-sync.mcp.dependencies.read.v1"
+      ],
+      "stateModel": [
+        "ready",
+        "not_configured",
+        "degraded",
+        "unauthorized",
+        "forbidden"
+      ],
+      "operations": [
+        {
+          "name": "read_service_snapshot",
+          "mode": "read",
+          "description": "Request a bounded snapshot on the exact Opto Sync service subject.",
+          "organizationScope": "NATS subject opto-sync.mcp.service.read.v1",
+          "timeoutMs": 5000,
+          "outputMaxBytes": 131072
+        },
+        {
+          "name": "read_dependency_snapshot",
+          "mode": "read",
+          "description": "Request a bounded snapshot on the exact Opto Sync dependency subject.",
+          "organizationScope": "NATS subject opto-sync.mcp.dependencies.read.v1",
+          "timeoutMs": 5000,
+          "outputMaxBytes": 131072
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "source_test",
+          "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+          "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+          "verifiedAt": "2026-09-01T01:37:59Z"
+        }
+      ]
+    }
+  ],
+  "organizationSurface": {
+    "repositories": [
+      "opto-sync/opto-sync-mcp-server.rs",
+      "opto-sync/syncer.c",
+      "opto-sync/syncer.rs",
+      "opto-sync/opto-sync-interfaces",
+      "opto-sync/opto-sync-lib",
+      "opto-sync/opto-sync-clients",
+      "opto-sync/opto-sync-api-server.rs",
+      "opto-sync/opto-sync-infra",
+      "opto-sync/opto-sync-monorepo",
+      "opto-sync/opto-sync-e2e"
+    ],
+    "services": [
+      "opto-sync-mcp-server",
+      "opto-sync-api-server",
+      "opto-sync-provider-plane"
+    ],
+    "kubernetesNamespaces": [
+      "opto-sync"
+    ],
+    "natsSubjects": [
+      "opto-sync.mcp.service.read.v1",
+      "opto-sync.mcp.dependencies.read.v1"
+    ],
+    "runbooks": [
+      "README.md#run",
+      "README.md#tools",
+      "README.md#configuration",
+      "README.md#security-and-observability"
+    ],
+    "tools": [
+      {
+        "name": "github_posture",
+        "description": "Read bounded organization metadata and latest workflow state from the exact Opto Sync GitHub scope.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "aws_posture",
+        "description": "Verify the configured AWS account and list only allowlisted Opto Sync EKS clusters with explicit failure states.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "aws"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "gcp_posture",
+        "description": "Read the exact configured Google Cloud project and bounded enabled-service state for Opto Sync.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "gcp"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "supabase_posture",
+        "description": "Read bounded auth settings and Data API paths from one exact Opto Sync Supabase project without accepting SQL.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "supabase"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "neon_posture",
+        "description": "Read Opto Sync-filtered Neon projects and safe branch state while excluding connection and credential material.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "neon"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "cloudflare_posture",
+        "description": "Read the exact configured Opto Sync Cloudflare zone and bounded DNS metadata without returning record content.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "cloudflare"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "k8s_posture",
+        "description": "Read deployment and pod readiness only in the Opto Sync namespace on the ORESoftware Kubernetes plane.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "k8s_cluster"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "nats_posture",
+        "description": "Request bounded service and dependency snapshots over two exact Opto Sync NATS subjects without wildcard access.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "nats"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 131072
+      },
+      {
+        "name": "organization_posture",
+        "description": "Compose all eight scoped provider reads into one bounded Opto Sync readiness view while retaining each five-state result.",
+        "implementation": {
+          "module": "src/parity.rs",
+          "symbol": "org_spec",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github",
+          "aws",
+          "gcp",
+          "supabase",
+          "neon",
+          "cloudflare",
+          "k8s_cluster",
+          "nats"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 524288
+      },
+      {
+        "name": "opto_sync_consumer_matrix",
+        "description": "Return the required Dart, Rust, and TypeScript synchronization consumer capabilities and breaking-contract policy.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_consumer_matrix",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      },
+      {
+        "name": "opto_sync_contract_invariants",
+        "description": "Return replay, watermark, tombstone, conflict, schema, ordering, and telemetry invariants for Opto Sync.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_contract_invariants",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      },
+      {
+        "name": "opto_sync_fleet_map",
+        "description": "Return the exact Opto Sync repositories and their synchronization, API, client, deployment, and contract roles.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_fleet_map",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      },
+      {
+        "name": "opto_sync_lifecycle_state",
+        "description": "Return the ready formal runtime state, monotonic revision, and bounded transition audit without allowing transitions.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_lifecycle_state",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "k8s_cluster"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      },
+      {
+        "name": "opto_sync_plan",
+        "description": "Calculate a bounded deterministic synchronization capacity plan without executing reconciliation or changing records.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_plan",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "nats"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      },
+      {
+        "name": "opto_sync_runtime_readiness",
+        "description": "Return the exact protocol, transport, client, authorization, provider-state, and lifecycle configuration contract.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_runtime_readiness",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github",
+          "aws",
+          "gcp",
+          "supabase",
+          "neon",
+          "cloudflare",
+          "k8s_cluster",
+          "nats"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      },
+      {
+        "name": "opto_sync_safety_boundary",
+        "description": "Return the exact Opto Sync prohibition on mutation, arbitrary commands or URLs, payload exposure, and secret logging.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_safety_boundary",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github",
+          "aws",
+          "gcp",
+          "supabase",
+          "neon",
+          "cloudflare",
+          "k8s_cluster",
+          "nats"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      },
+      {
+        "name": "opto_sync_shared_platform",
+        "description": "Return bounded Opto Sync context for Kubernetes, shared interfaces, migrations, Cloudflare, Supabase, and Fiducia.",
+        "implementation": {
+          "module": "src/server.rs",
+          "symbol": "opto_sync_shared_platform",
+          "test": "tests/stdio_integration.rs"
+        },
+        "integrations": [
+          "github",
+          "supabase",
+          "cloudflare",
+          "k8s_cluster"
+        ],
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchemaClosed": true,
+        "outputMaxBytes": 40960
+      }
+    ],
+    "resources": [
+      {
+        "uri": "contract://opto-sync/mcp-clients",
+        "description": "Local and remote Opto Sync MCP client compatibility and exact Shared Auth boundaries.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "contract://opto-sync/providers",
+        "description": "Five-state provider semantics and exact read-only Opto Sync infrastructure scopes.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "docs://opto-sync-protocol",
+        "description": "Opto Sync replay, conflict, watermark, tombstone, schema, and causal-order contract.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "orgmap://opto-sync",
+        "description": "Exact Opto Sync repository ownership, deployment authority, and dependency map.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "schema://opto-sync-contract",
+        "description": "Bounded machine-readable outline of the Opto Sync reconciliation contract.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "consumer_compatibility",
+        "description": "Review an Opto Sync contract change against required Dart, Rust, and TypeScript consumers.",
+        "referencedTools": [
+          "opto_sync_consumer_matrix",
+          "opto_sync_contract_invariants"
+        ]
+      },
+      {
+        "name": "dependency_review",
+        "description": "Review Opto Sync organization dependencies and provider posture without changing state.",
+        "referencedTools": [
+          "organization_posture",
+          "opto_sync_fleet_map"
+        ]
+      },
+      {
+        "name": "deploy_readiness",
+        "description": "Decide whether Opto Sync protocol, lifecycle, providers, and consumer contracts have sufficient evidence to deploy.",
+        "referencedTools": [
+          "organization_posture",
+          "opto_sync_contract_invariants",
+          "opto_sync_lifecycle_state",
+          "opto_sync_runtime_readiness"
+        ]
+      },
+      {
+        "name": "provider_triage",
+        "description": "Triage one Opto Sync infrastructure dependency without mutation or credential exposure.",
+        "referencedTools": [
+          "organization_posture",
+          "github_posture",
+          "aws_posture",
+          "gcp_posture",
+          "supabase_posture",
+          "neon_posture",
+          "cloudflare_posture",
+          "k8s_posture",
+          "nats_posture"
+        ]
+      },
+      {
+        "name": "sync_conflict_review",
+        "description": "Review Opto Sync conflict semantics, replay safety, causal ordering, and bounded operational planning.",
+        "referencedTools": [
+          "opto_sync_contract_invariants",
+          "opto_sync_plan",
+          "opto_sync_safety_boundary"
+        ]
+      }
+    ],
+    "composedReadTool": "organization_posture"
+  },
+  "security": {
+    "secretsEnvironmentOnly": true,
+    "secretValuesExcluded": true,
+    "stdoutProtocolOnly": true,
+    "boundedLowCardinalityTelemetry": true,
+    "exactOriginAllowlists": true,
+    "credentialedRedirectsDisabled": true,
+    "credentialedAmbientProxyDisabled": true,
+    "mutationGate": {
+      "defaultDenied": true,
+      "runtimeAuthorization": true,
+      "allowlistedTargets": true,
+      "dryRun": true,
+      "targetBoundConfirmation": true,
+      "idempotency": true,
+      "boundedAudit": true
+    }
+  },
+  "evidence": {
+    "repositoryTests": [
+      {
+        "kind": "source_test",
+        "reference": "tests/stdio_integration.rs#real_process_exposes_exact_augmented_catalog_without_stdout_noise",
+        "revision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+        "verifiedAt": "2026-09-01T01:37:59Z"
+      }
+    ],
+    "testOrganization": {
+      "repository": "oresoftware-test/mcp-fleet-conformance",
+      "productionRevision": "43b348123de03e39cfc99ac820509d191ee23a8b",
+      "evidence": {
+        "kind": "test_org_run",
+        "reference": "https://github.com/oresoftware-test/mcp-fleet-conformance/actions/runs/33458737004",
+        "revision": "76d6e90a1ac3dfcfb597bc935e72ce266b1b6bf7",
+        "verifiedAt": "2026-09-01T01:37:59Z"
+      }
+    },
+    "sharedLibraryRevision": "7db434c7849ad153342e0daaac8a8f6f1d2dea5e",
+    "lockfileCommitted": true
+  }
+}

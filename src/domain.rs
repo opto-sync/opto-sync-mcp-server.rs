@@ -9,7 +9,7 @@ pub const REPOSITORY: &str = "opto-sync-mcp-server.rs";
 pub const DOMAIN_SUMMARY: &str = "Read-only MCP diagnostics for reconciliation, validation, protocol inspection, and consumer compatibility";
 pub const UNIT_LABEL: &str = "operation units";
 
-const REPOSITORIES: [(&str, &str); 5] = [
+const REPOSITORIES: [(&str, &str); 10] = [
     (
         "syncer.c",
         "canonical deep-merge engine with cross-language overrides",
@@ -24,13 +24,17 @@ const REPOSITORIES: [(&str, &str); 5] = [
     ),
     ("opto-sync-lib", "local-first synchronization semantics"),
     ("opto-sync-clients", "Dart, TypeScript, and Rust clients"),
-];
-
-const READINESS_VARIABLES: [&str; 4] = [
-    "SUPABASE_URL",
-    "SHARED_AUTH_BASE_URL",
-    "GITHUB_TOKEN",
-    "FIDUCIA_TOKEN",
+    ("opto-sync-api-server.rs", "synchronization JSON API"),
+    (
+        "opto-sync-infra",
+        "Cloudflare and Kubernetes infrastructure",
+    ),
+    ("opto-sync-mcp-server.rs", "read-only MCP diagnostics"),
+    ("opto-sync-monorepo", "deployable application gitlinks"),
+    (
+        "opto-sync-e2e",
+        "external protocol and consumer conformance",
+    ),
 ];
 
 const DOMAIN_NOTES: [&str; 3] = [
@@ -118,16 +122,17 @@ pub fn plan(input: PlanInput) -> Result<Value, String> {
 }
 
 #[must_use]
-pub fn runtime_readiness() -> Value {
-    let variables = READINESS_VARIABLES
-        .into_iter()
-        .map(|name| json!({"name": name, "configured": std::env::var_os(name).is_some()}))
-        .collect::<Vec<_>>();
+pub fn runtime_readiness(lifecycle_audit_capacity: usize) -> Value {
     json!({
-        "configuration": variables,
+        "protocolRevision": "2025-11-25",
+        "transports": ["stdio", "streamable_http"],
+        "clients": ["cursor", "openai", "anthropic", "gemini", "grok", "qwen"],
+        "remoteAuthentication": "shared-auth OAuth 2.1 with exact issuer, audience, client, realm, scope, role, and AAL2 validation",
+        "providerTool": "organization_posture",
+        "providerStates": ["ready", "not_configured", "degraded", "unauthorized", "forbidden"],
+        "lifecycleAuditCapacity": lifecycle_audit_capacity,
         "valuesExposed": false,
-        "networkChecked": false,
-        "authenticated": false
+        "missingConfigurationMeansSuccess": false
     })
 }
 
@@ -195,9 +200,10 @@ mod tests {
 
     #[test]
     fn readiness_discloses_presence_only() {
-        let value = runtime_readiness();
+        let value = runtime_readiness(128);
         assert_eq!(value["valuesExposed"], false);
-        assert_eq!(value["networkChecked"], false);
-        assert_eq!(value["authenticated"], false);
+        assert_eq!(value["missingConfigurationMeansSuccess"], false);
+        assert_eq!(value["lifecycleAuditCapacity"], 128);
+        assert_eq!(value["protocolRevision"], "2025-11-25");
     }
 }
