@@ -22,7 +22,7 @@ jobs:
           toolchain: 1.95.0
       # Test inherited diagnostics on the actual augmented product server.
       # Product-specific tools and existing tests are neither replaced nor executed here.
-      - uses: ORESoftware/org-mcp-server-template.rs/.github/actions/mcp-contracts@5259fd409062e93862da914b34e7bc75f0fd20c7
+      - uses: ORESoftware/org-mcp-server-template.rs/.github/actions/mcp-contracts@1435a315c14259db6ad97492e88b373d4b5acbed
         with:
           binary: opto-sync-mcp-server
           profile: fleet-v2
