@@ -23,7 +23,7 @@ jobs:
       # Test inherited diagnostics on the actual augmented product server.
       # Product-specific tools and existing tests are neither replaced nor executed here.
       # DEN-3828: strict wire JSON, pinned shared parser bytes, and current-run evidence.
-      - uses: ORESoftware/org-mcp-server-template.rs/.github/actions/mcp-contracts@2c1bcb5bf156f21da00ca914782a547c4635fe8f
+      - uses: ORESoftware/org-mcp-server-template.rs/.github/actions/mcp-contracts@a1648e79ce7e8fcadbcc1a822a71d2c43b44a039
         with:
           binary: opto-sync-mcp-server
           profile: fleet-v2
