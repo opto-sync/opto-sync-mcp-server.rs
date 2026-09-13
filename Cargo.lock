@@ -1863,6 +1863,7 @@ dependencies = [
  "flags2env",
  "ore-mcp-org-server",
  "ores-mcp-server-core-libs",
+ "oresoftware-next-loggers",
  "rmcp 2.2.0",
  "schemars",
  "serde",
@@ -2004,6 +2005,15 @@ dependencies = [
  "tracing",
  "tracing-opentelemetry",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "oresoftware-next-loggers"
+version = "0.1.0"
+source = "git+https://github.com/ores-otel/ores.otel.log.git?rev=64a4ee0ed839a8de7e9ba2588899a24e25b05a65#64a4ee0ed839a8de7e9ba2588899a24e25b05a65"
+dependencies = [
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

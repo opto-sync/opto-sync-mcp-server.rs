@@ -19,6 +19,7 @@ path = "src/http.rs"
 [dependencies]
 anyhow = "=1.0.104"
 flags2env = { git = "https://github.com/ORESoftware/flags-2-env.git", rev = "377bff1a4e7424eb98377997a232ddc0fc700f59" }
+next-loggers = { package = "oresoftware-next-loggers", git = "https://github.com/ores-otel/ores.otel.log.git", rev = "64a4ee0ed839a8de7e9ba2588899a24e25b05a65" }
 ore-mcp-org-server = { git = "https://github.com/ORESoftware/mcp-rust-libs", rev = "7db434c7849ad153342e0daaac8a8f6f1d2dea5e" }
 ores-mcp-server-core-libs = { git = "https://github.com/ores-otel/ores-mcp-server-core-libs.rs", rev = "e559a76f869c2c2d9bf939b510d358a3924abd81" }
 rmcp = { version = "2.2", default-features = false, features = ["macros", "schemars", "server", "transport-io"] }

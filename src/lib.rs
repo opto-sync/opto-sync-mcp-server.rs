@@ -5,6 +5,7 @@
 pub mod domain;
 pub mod flags;
 pub mod knowledge;
+pub mod observability;
 pub mod parity;
 pub mod runtime;
 pub mod server;
