@@ -1,0 +1,11 @@
+schema_version: ores.compose.v1
+project: opto-sync-mcp-server.rs
+allow_lazy_start: false
+
+services:
+  opto-sync-mcp-server.rs:
+    name: opto-sync-mcp-server.rs
+    runtime: host
+    build:
+      - ["cargo", "build", "--bins"]
+    command: ["./target/debug/opto-sync-mcp-server.rs"]
