@@ -1,0 +1,36 @@
+{
+  "schema": "opto-sync.conformance-manifest/v1",
+  "repository": "opto-sync/opto-sync-mcp-server.rs",
+  "claims": [
+    {
+      "id": "mcp.catalog.read_only",
+      "implementation": "src/server.rs",
+      "evidence": ["server::tests::metadata_is_read_only_and_namespaced"]
+    },
+    {
+      "id": "mcp.catalog.closed_namespaced",
+      "implementation": "src/server.rs",
+      "evidence": ["server::tests::exact_prefixed_tool_catalog_is_exposed"]
+    },
+    {
+      "id": "mcp.output.bounded_fail_closed",
+      "implementation": "src/server.rs",
+      "evidence": ["server::tests::output_bound_fails_closed"]
+    }
+  ],
+  "future_gates": [
+    "authenticated_identity",
+    "tenant_binding",
+    "tool_specific_authorization",
+    "write_scope",
+    "stable_mutation_identity",
+    "idempotency",
+    "audit_telemetry",
+    "negative_controls"
+  ],
+  "non_claims": [
+    "mutating_tool_surface",
+    "tenant_scoped_writes",
+    "generic_execution"
+  ]
+}
