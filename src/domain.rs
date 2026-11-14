@@ -9,32 +9,81 @@ pub const REPOSITORY: &str = "opto-sync-mcp-server.rs";
 pub const DOMAIN_SUMMARY: &str = "Read-only MCP diagnostics for reconciliation, validation, protocol inspection, and consumer compatibility";
 pub const UNIT_LABEL: &str = "operation units";
 
-const REPOSITORIES: [(&str, &str); 10] = [
+const REPOSITORIES: [(&str, &str); 26] = [
     (
-        "syncer.c",
-        "canonical deep-merge engine with cross-language overrides",
+        ".github",
+        "organization governance and reusable repository policy",
     ),
     (
-        "syncer.rs",
-        "Rust-native engine with C ABI and WebAssembly surfaces",
+        "opto-sync-admin-api-server.rs",
+        "privileged administration JSON API",
+    ),
+    (
+        "opto-sync-admin-web-server.rs",
+        "privileged administration web service",
+    ),
+    ("opto-sync-api-server.rs", "authenticated product JSON API"),
+    (
+        "opto-sync-assets",
+        "versioned product branding and static assets",
+    ),
+    (
+        "opto-sync-cli",
+        "read-only validation and sync diagnostic CLI",
+    ),
+    (
+        "opto-sync-clients",
+        "Dart, Rust, and TypeScript client adapters",
+    ),
+    (
+        "opto-sync-desktop-app.rs",
+        "native desktop application runtime",
+    ),
+    (
+        "opto-sync-docs",
+        "architecture, operational, and legal documentation",
+    ),
+    (
+        "opto-sync-e2e",
+        "external protocol, server, and client conformance tests",
+    ),
+    (
+        "opto-sync-flutter",
+        "Flutter mobile and desktop application",
+    ),
+    (
+        "opto-sync-infra",
+        "Cloudflare, Kubernetes, and infrastructure composition",
     ),
     (
         "opto-sync-interfaces",
-        "transport-neutral schemas and generated contracts",
+        "transport-neutral schema and interface contracts",
     ),
-    ("opto-sync-lib", "local-first synchronization semantics"),
-    ("opto-sync-clients", "Dart, TypeScript, and Rust clients"),
-    ("opto-sync-api-server.rs", "synchronization JSON API"),
+    ("opto-sync-lambdas", "bounded cross-server AWS Lambda jobs"),
+    ("opto-sync-lib", "runtime-neutral synchronization policy"),
     (
-        "opto-sync-infra",
-        "Cloudflare and Kubernetes infrastructure",
+        "opto-sync-lib-core",
+        "domain configuration and SeaORM database boundary",
     ),
-    ("opto-sync-mcp-server.rs", "read-only MCP diagnostics"),
-    ("opto-sync-monorepo", "deployable application gitlinks"),
     (
-        "opto-sync-e2e",
-        "external protocol and consumer conformance",
+        "opto-sync-mcp-server.rs",
+        "read-only MCP diagnostics and inventory",
     ),
+    (
+        "opto-sync-monorepo",
+        "immutable SDK and application composition workspace",
+    ),
+    (
+        "opto-sync-orm-core",
+        "typed ORM runtime projections and capabilities",
+    ),
+    ("opto-sync-pub-lib-core", "public library core placeholder"),
+    ("opto-sync-sidecar.rs", "colocated telemetry sidecar"),
+    ("opto-sync-sync", "sync package placeholder"),
+    ("opto-sync-web-server.rs", "product web service"),
+    ("opto-sync.github.io", "public product website"),
+    ("syncer.c", "canonical C merge engine"),
+    ("syncer.rs", "native Rust merge and causal-ordering engine"),
 ];
 
 const DOMAIN_NOTES: [&str; 3] = [
@@ -86,6 +135,9 @@ pub fn fleet_map() -> Value {
         "repository": REPOSITORY,
         "summary": DOMAIN_SUMMARY,
         "repositories": repositories,
+        "repositoryCount": REPOSITORIES.len(),
+        "inventoryKind": "static",
+        "inventoryAsOf": "2026-11-14",
         "readOnly": true
     })
 }
@@ -163,6 +215,31 @@ mod tests {
     use serde_json::json;
 
     use super::*;
+
+    #[test]
+    fn fleet_snapshot_covers_all_26_repositories_without_duplicate_names() {
+        let output = fleet_map();
+        assert_eq!(output["repositoryCount"], 26);
+        assert_eq!(output["inventoryKind"], "static");
+        assert_eq!(output["inventoryAsOf"], "2026-11-14");
+        let repositories = output["repositories"].as_array().expect("repository array");
+        let names = repositories
+            .iter()
+            .map(|entry| entry["name"].as_str().expect("name"))
+            .collect::<std::collections::BTreeSet<_>>();
+        assert_eq!(repositories.len(), 26);
+        assert_eq!(names.len(), 26);
+        assert!(names.contains("opto-sync-cli"));
+        assert!(names.contains("opto-sync-docs"));
+        assert!(names.contains("opto-sync-pub-lib-core"));
+        assert!(names.contains("syncer.c"));
+        assert!(names.contains("syncer.rs"));
+        assert!(
+            repositories
+                .iter()
+                .all(|entry| { entry["role"].as_str().is_some_and(|role| !role.is_empty()) })
+        );
+    }
 
     #[test]
     fn plan_is_bounded_and_deterministic() {
