@@ -58,7 +58,7 @@ The Opto Sync domain layer contributes eight additional read-only tools:
 
 - `opto_sync_consumer_matrix` — required Dart, Rust, and TypeScript features and breaking-contract policy.
 - `opto_sync_contract_invariants` — stable identities, idempotent replay, causal order, watermarks, tombstones, conflicts, schemas, and telemetry invariants.
-- `opto_sync_fleet_map` — exact repositories and component responsibilities.
+- `opto_sync_fleet_map` — dated static inventory of all 26 currently verified organization repositories, component responsibilities, and repository count (not a live GitHub scan).
 - `opto_sync_lifecycle_state` — current formal lifecycle state, monotonic revision, and bounded transition audit.
 - `opto_sync_plan` — deterministic capacity planning from a closed workload enum and bounded numeric inputs; it never executes the plan.
 - `opto_sync_runtime_readiness` — exact protocol, transport, client, Shared Auth, provider-state, and lifecycle configuration.
