@@ -10,25 +10,73 @@ pub const DOMAIN_SUMMARY: &str = "Read-only MCP diagnostics for reconciliation, 
 pub const UNIT_LABEL: &str = "operation units";
 
 const REPOSITORIES: [(&str, &str); 26] = [
-    (".github", "organization governance and reusable repository policy"),
-    ("opto-sync-admin-api-server.rs", "privileged administration JSON API"),
-    ("opto-sync-admin-web-server.rs", "privileged administration web service"),
+    (
+        ".github",
+        "organization governance and reusable repository policy",
+    ),
+    (
+        "opto-sync-admin-api-server.rs",
+        "privileged administration JSON API",
+    ),
+    (
+        "opto-sync-admin-web-server.rs",
+        "privileged administration web service",
+    ),
     ("opto-sync-api-server.rs", "authenticated product JSON API"),
-    ("opto-sync-assets", "versioned product branding and static assets"),
-    ("opto-sync-cli", "read-only validation and sync diagnostic CLI"),
-    ("opto-sync-clients", "Dart, Rust, and TypeScript client adapters"),
-    ("opto-sync-desktop-app.rs", "native desktop application runtime"),
-    ("opto-sync-docs", "architecture, operational, and legal documentation"),
-    ("opto-sync-e2e", "external protocol, server, and client conformance tests"),
-    ("opto-sync-flutter", "Flutter mobile and desktop application"),
-    ("opto-sync-infra", "Cloudflare, Kubernetes, and infrastructure composition"),
-    ("opto-sync-interfaces", "transport-neutral schema and interface contracts"),
+    (
+        "opto-sync-assets",
+        "versioned product branding and static assets",
+    ),
+    (
+        "opto-sync-cli",
+        "read-only validation and sync diagnostic CLI",
+    ),
+    (
+        "opto-sync-clients",
+        "Dart, Rust, and TypeScript client adapters",
+    ),
+    (
+        "opto-sync-desktop-app.rs",
+        "native desktop application runtime",
+    ),
+    (
+        "opto-sync-docs",
+        "architecture, operational, and legal documentation",
+    ),
+    (
+        "opto-sync-e2e",
+        "external protocol, server, and client conformance tests",
+    ),
+    (
+        "opto-sync-flutter",
+        "Flutter mobile and desktop application",
+    ),
+    (
+        "opto-sync-infra",
+        "Cloudflare, Kubernetes, and infrastructure composition",
+    ),
+    (
+        "opto-sync-interfaces",
+        "transport-neutral schema and interface contracts",
+    ),
     ("opto-sync-lambdas", "bounded cross-server AWS Lambda jobs"),
     ("opto-sync-lib", "runtime-neutral synchronization policy"),
-    ("opto-sync-lib-core", "domain configuration and SeaORM database boundary"),
-    ("opto-sync-mcp-server.rs", "read-only MCP diagnostics and inventory"),
-    ("opto-sync-monorepo", "immutable SDK and application composition workspace"),
-    ("opto-sync-orm-core", "typed ORM runtime projections and capabilities"),
+    (
+        "opto-sync-lib-core",
+        "domain configuration and SeaORM database boundary",
+    ),
+    (
+        "opto-sync-mcp-server.rs",
+        "read-only MCP diagnostics and inventory",
+    ),
+    (
+        "opto-sync-monorepo",
+        "immutable SDK and application composition workspace",
+    ),
+    (
+        "opto-sync-orm-core",
+        "typed ORM runtime projections and capabilities",
+    ),
     ("opto-sync-pub-lib-core", "public library core placeholder"),
     ("opto-sync-sidecar.rs", "colocated telemetry sidecar"),
     ("opto-sync-sync", "sync package placeholder"),
@@ -186,9 +234,11 @@ mod tests {
         assert!(names.contains("opto-sync-pub-lib-core"));
         assert!(names.contains("syncer.c"));
         assert!(names.contains("syncer.rs"));
-        assert!(repositories.iter().all(|entry| {
-            entry["role"].as_str().is_some_and(|role| !role.is_empty())
-        }));
+        assert!(
+            repositories
+                .iter()
+                .all(|entry| { entry["role"].as_str().is_some_and(|role| !role.is_empty()) })
+        );
     }
 
     #[test]
