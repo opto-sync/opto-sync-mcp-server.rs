@@ -9,10 +9,14 @@ pub const REPOSITORY: &str = "opto-sync-mcp-server.rs";
 pub const DOMAIN_SUMMARY: &str = "Read-only MCP diagnostics for reconciliation, validation, protocol inspection, and consumer compatibility";
 pub const UNIT_LABEL: &str = "operation units";
 
-const REPOSITORIES: [(&str, &str); 26] = [
+const REPOSITORIES: [(&str, &str); 27] = [
     (
         ".github",
         "organization governance and reusable repository policy",
+    ),
+    (
+        "atto-ci",
+        "AttoLang compiler and CI reference integration (not product guest certification)",
     ),
     (
         "opto-sync-admin-api-server.rs",
@@ -137,7 +141,7 @@ pub fn fleet_map() -> Value {
         "repositories": repositories,
         "repositoryCount": REPOSITORIES.len(),
         "inventoryKind": "static",
-        "inventoryAsOf": "2026-11-14",
+        "inventoryAsOf": "2026-11-15",
         "readOnly": true
     })
 }
@@ -217,18 +221,19 @@ mod tests {
     use super::*;
 
     #[test]
-    fn fleet_snapshot_covers_all_26_repositories_without_duplicate_names() {
+    fn fleet_snapshot_covers_all_27_repositories_without_duplicate_names() {
         let output = fleet_map();
-        assert_eq!(output["repositoryCount"], 26);
+        assert_eq!(output["repositoryCount"], 27);
         assert_eq!(output["inventoryKind"], "static");
-        assert_eq!(output["inventoryAsOf"], "2026-11-14");
+        assert_eq!(output["inventoryAsOf"], "2026-11-15");
         let repositories = output["repositories"].as_array().expect("repository array");
         let names = repositories
             .iter()
             .map(|entry| entry["name"].as_str().expect("name"))
             .collect::<std::collections::BTreeSet<_>>();
-        assert_eq!(repositories.len(), 26);
-        assert_eq!(names.len(), 26);
+        assert_eq!(repositories.len(), 27);
+        assert_eq!(names.len(), 27);
+        assert!(names.contains("atto-ci"));
         assert!(names.contains("opto-sync-cli"));
         assert!(names.contains("opto-sync-docs"));
         assert!(names.contains("opto-sync-pub-lib-core"));
